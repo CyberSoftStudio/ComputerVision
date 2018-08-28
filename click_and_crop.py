@@ -1,7 +1,6 @@
 # import the necessary packages
-import argparse
 import cv2
-import scripts.opencv_homography_lib as hl
+import opencv_homography_lib as hl
 
 # initialize the list of reference points and boolean indicating
 # whether cropping is being performed or not
@@ -65,12 +64,17 @@ roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
 cap = cv2.VideoCapture(0)
 
 while True:
-    ok, img1 = cap.read()
-    img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-    img, _ = hl.sift_homography(roi, img1)
-    cv2.imshow("correspondence", img)
+    try:
+        ok, img1 = cap.read()
+        img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+        img, _ = hl.surf_homography(roi, img1)
+        cv2.imshow("correspondence", img)
 
-    k = cv2.waitKey(1) & 0xff
-    if k == 27: break
+        k = cv2.waitKey(1) & 0xff
+        if k == 27:
+            break
+    except Exception as e:
+        print(e)
+
 # close all open windows
 cv2.destroyAllWindows()
